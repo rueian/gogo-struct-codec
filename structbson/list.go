@@ -6,9 +6,9 @@ import (
 	"reflect"
 )
 
-type ListCodec struct {
-	vc ValueCodec
-}
+var DefaultListCodec = ListCodec{}
+
+type ListCodec struct{}
 
 func (c ListCodec) EncodeValue(ec bsoncodec.EncodeContext, vw bsonrw.ValueWriter, val reflect.Value) error {
 	if !val.IsValid() || val.Type() != ProtoListValueType {
@@ -46,7 +46,7 @@ func (c ListCodec) DecodeValue(dc bsoncodec.DecodeContext, vr bsonrw.ValueReader
 
 		elem := reflect.New(ProtoValueType)
 
-		err = c.vc.DecodeValue(dc, vr, elem.Elem())
+		err = DefaultValueCodec.DecodeValue(dc, vr, elem.Elem())
 		if err != nil {
 			return err
 		}

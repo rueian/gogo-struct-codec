@@ -6,9 +6,9 @@ import (
 	"reflect"
 )
 
-type StructCodec struct {
-	vc ValueCodec
-}
+var DefaultStructCodec = StructCodec{}
+
+type StructCodec struct{}
 
 func (c StructCodec) EncodeValue(ec bsoncodec.EncodeContext, vw bsonrw.ValueWriter, val reflect.Value) error {
 	if !val.IsValid() || val.Type() != ProtoStructType {
@@ -34,7 +34,7 @@ func (c StructCodec) EncodeValue(ec bsoncodec.EncodeContext, vw bsonrw.ValueWrit
 		if vv.IsNil() {
 			err = evw.WriteNull()
 		} else {
-			err = c.vc.EncodeValue(ec, evw, vv.Elem())
+			err = DefaultValueCodec.EncodeValue(ec, evw, vv.Elem())
 		}
 		if err != nil {
 			return err

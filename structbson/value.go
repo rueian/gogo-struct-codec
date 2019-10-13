@@ -2,11 +2,14 @@ package structbson
 
 import (
 	"fmt"
+	"github.com/gogo/protobuf/types"
 	"go.mongodb.org/mongo-driver/bson/bsoncodec"
 	"go.mongodb.org/mongo-driver/bson/bsonrw"
 	"go.mongodb.org/mongo-driver/bson/bsontype"
 	"reflect"
 )
+
+var DefaultValueCodec = ValueCodec{}
 
 type ValueCodec struct{}
 
@@ -45,69 +48,57 @@ func (c ValueCodec) DecodeValue(dc bsoncodec.DecodeContext, vr bsonrw.ValueReade
 	kindField := val.Field(0) // the 'Kind' field
 
 	switch vr.Type() {
+	case bsontype.Null:
+		kindField.Set(reflect.ValueOf(&types.Value_NullValue{}))
+		return vr.ReadNull()
+	case bsontype.Undefined:
+		kindField.Set(reflect.ValueOf(&types.Value_NullValue{}))
+		return vr.ReadUndefined()
 	case bsontype.Type(0):
-		kindField.Set(reflect.New(ProtoValueNullType))
+		kindField.Set(reflect.ValueOf(&types.Value_NullValue{}))
+		return nil
 	case bsontype.EmbeddedDocument:
-		kindField.Set(reflect.New(ProtoValueStructType))
-		valueField := kindField.Elem().Elem().Field(0)
-		valueField.Set(reflect.New(ProtoStructType))
-		structValue := valueField.Elem()
-		decoder, err := dc.LookupDecoder(structValue.Type())
-		if err != nil {
+		value := &types.Value_StructValue{StructValue: &types.Struct{}}
+		if err := DefaultStructCodec.DecodeValue(dc, vr, reflect.ValueOf(value.StructValue).Elem()); err != nil {
 			return err
 		}
-		return decoder.DecodeValue(dc, vr, structValue)
+		kindField.Set(reflect.ValueOf(value))
 	case bsontype.Array:
-		kindField.Set(reflect.New(ProtoValueListType))
-		valueField := kindField.Elem().Elem().Field(0)
-		valueField.Set(reflect.New(ProtoListValueType))
-		listValue := valueField.Elem()
-		decoder, err := dc.LookupDecoder(listValue.Type())
-		if err != nil {
+		list := &types.Value_ListValue{ListValue: &types.ListValue{}}
+		if err := DefaultListCodec.DecodeValue(dc, vr, reflect.ValueOf(list.ListValue).Elem()); err != nil {
 			return err
 		}
-		return decoder.DecodeValue(dc, vr, listValue)
+		kindField.Set(reflect.ValueOf(list))
 	case bsontype.Double:
-		kindField.Set(reflect.New(ProtoValueNumberType))
 		v, err := vr.ReadDouble()
 		if err != nil {
 			return err
 		}
-		kindField.Elem().Elem().Field(0).SetFloat(v)
+		kindField.Set(reflect.ValueOf(&types.Value_NumberValue{NumberValue: v}))
 	case bsontype.Int32:
-		kindField.Set(reflect.New(ProtoValueNumberType))
 		v, err := vr.ReadInt32()
 		if err != nil {
 			return err
 		}
-		kindField.Elem().Elem().Field(0).SetFloat(float64(v))
+		kindField.Set(reflect.ValueOf(&types.Value_NumberValue{NumberValue: float64(v)}))
 	case bsontype.Int64:
-		kindField.Set(reflect.New(ProtoValueNumberType))
 		v, err := vr.ReadInt64()
 		if err != nil {
 			return err
 		}
-		kindField.Elem().Elem().Field(0).SetFloat(float64(v))
+		kindField.Set(reflect.ValueOf(&types.Value_NumberValue{NumberValue: float64(v)}))
 	case bsontype.String:
-		kindField.Set(reflect.New(ProtoValueStringType))
 		v, err := vr.ReadString()
 		if err != nil {
 			return err
 		}
-		kindField.Elem().Elem().Field(0).SetString(v)
+		kindField.Set(reflect.ValueOf(&types.Value_StringValue{StringValue: v}))
 	case bsontype.Boolean:
-		kindField.Set(reflect.New(ProtoValueBoolType))
 		v, err := vr.ReadBoolean()
 		if err != nil {
 			return err
 		}
-		kindField.Elem().Elem().Field(0).SetBool(v)
-	case bsontype.Null:
-		kindField.Set(reflect.New(ProtoValueNullType))
-		return vr.ReadNull()
-	case bsontype.Undefined:
-		kindField.Set(reflect.New(ProtoValueNullType))
-		return vr.ReadUndefined()
+		kindField.Set(reflect.ValueOf(&types.Value_BoolValue{BoolValue: v}))
 	default:
 		return fmt.Errorf("cannot decode %v into a %s", vr.Type(), val.Type())
 	}
