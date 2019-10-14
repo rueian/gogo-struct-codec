@@ -6,5 +6,5 @@ import "github.com/gogo/protobuf/gogoproto/gogo.proto";
 import "google/protobuf/struct.proto";
 
 message MyMessage {
-    google.protobuf.Struct payload = 1 [(gogoproto.customtype) = "github.com/rueian/gogo-struct-codec/ptypes.Struct"];
+    google.protobuf.Struct payload = 1;
 }

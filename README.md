@@ -20,12 +20,16 @@ Please take [./example](./example) a look.
 syntax = "proto3";
 package example;
 
-import "github.com/gogo/protobuf/gogoproto/gogo.proto";
 import "google/protobuf/struct.proto";
 
 message MyMessage {
-    google.protobuf.Struct payload = 1 [(gogoproto.customtype) = "github.com/rueian/gogo-struct-codec/ptypes.Struct"];
+    google.protobuf.Struct payload = 1;
 }
+```
+
+And please take [./example/gen.sh](./example/gen.sh) a look as well. There is how to tell the gogo output plugin to replace the `Struct` with our one.
+```shell script
+./gen.sh
 ```
 
 ## BSON Codec

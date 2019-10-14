@@ -7,8 +7,7 @@ import (
 	fmt "fmt"
 	_ "github.com/gogo/protobuf/gogoproto"
 	proto "github.com/gogo/protobuf/proto"
-	_ "github.com/gogo/protobuf/types"
-	github_com_rueian_gogo_struct_codec_ptypes "github.com/rueian/gogo-struct-codec/ptypes"
+	ptypes "github.com/rueian/gogo-struct-codec/ptypes"
 	io "io"
 	math "math"
 	math_bits "math/bits"
@@ -28,7 +27,7 @@ var _ = math.Inf
 const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 
 type MyMessage struct {
-	Payload *github_com_rueian_gogo_struct_codec_ptypes.Struct `protobuf:"bytes,1,opt,name=payload,proto3,customtype=github.com/rueian/gogo-struct-codec/ptypes.Struct" json:"payload,omitempty"`
+	Payload *ptypes.Struct `protobuf:"bytes,1,opt,name=payload,proto3" json:"payload,omitempty"`
 }
 
 func (m *MyMessage) Reset()      { *m = MyMessage{} }
@@ -63,6 +62,13 @@ func (m *MyMessage) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_MyMessage proto.InternalMessageInfo
 
+func (m *MyMessage) GetPayload() *ptypes.Struct {
+	if m != nil {
+		return m.Payload
+	}
+	return nil
+}
+
 func init() {
 	proto.RegisterType((*MyMessage)(nil), "example.MyMessage")
 }
@@ -70,22 +76,20 @@ func init() {
 func init() { proto.RegisterFile("example.proto", fileDescriptor_15a1dc8d40dadaa6) }
 
 var fileDescriptor_15a1dc8d40dadaa6 = []byte{
-	// 233 bytes of a gzipped FileDescriptorProto
+	// 198 bytes of a gzipped FileDescriptorProto
 	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xe2, 0xe2, 0x4d, 0xad, 0x48, 0xcc,
 	0x2d, 0xc8, 0x49, 0xd5, 0x2b, 0x28, 0xca, 0x2f, 0xc9, 0x17, 0x62, 0x87, 0x72, 0xa5, 0x74, 0xd3,
 	0x33, 0x4b, 0x32, 0x4a, 0x93, 0xf4, 0x92, 0xf3, 0x73, 0xf5, 0xd3, 0xf3, 0xd3, 0xf3, 0xf5, 0xc1,
 	0xf2, 0x49, 0xa5, 0x69, 0x60, 0x1e, 0x98, 0x03, 0x66, 0x41, 0xf4, 0x49, 0xc9, 0xa4, 0xe7, 0xe7,
-	0xa7, 0xe7, 0xa4, 0x22, 0x54, 0x15, 0x97, 0x14, 0x95, 0x26, 0x97, 0x40, 0x64, 0x95, 0x4a, 0xb9,
-	0x38, 0x7d, 0x2b, 0x7d, 0x53, 0x8b, 0x8b, 0x13, 0xd3, 0x53, 0x85, 0x32, 0xb8, 0xd8, 0x0b, 0x12,
+	0xa7, 0xe7, 0xa4, 0x22, 0x54, 0x15, 0x97, 0x14, 0x95, 0x26, 0x97, 0x40, 0x64, 0x95, 0xec, 0xb8,
+	0x38, 0x7d, 0x2b, 0x7d, 0x53, 0x8b, 0x8b, 0x13, 0xd3, 0x53, 0x85, 0x0c, 0xb9, 0xd8, 0x0b, 0x12,
 	0x2b, 0x73, 0xf2, 0x13, 0x53, 0x24, 0x18, 0x15, 0x18, 0x35, 0xb8, 0x8d, 0xc4, 0xf5, 0x20, 0x9a,
-	0xf5, 0x60, 0x9a, 0xf5, 0x82, 0xc1, 0x9a, 0x9d, 0x4c, 0x6f, 0xdd, 0x93, 0x37, 0x44, 0x72, 0x47,
-	0x51, 0x69, 0x6a, 0x66, 0x62, 0x1e, 0xd8, 0x5a, 0x5d, 0x88, 0xf9, 0xba, 0xc9, 0xf9, 0x29, 0xa9,
-	0xc9, 0xfa, 0x05, 0x25, 0x95, 0x05, 0xa9, 0xc5, 0x50, 0x6d, 0x41, 0x30, 0xe3, 0x9d, 0x4c, 0x2e,
-	0x3c, 0x94, 0x63, 0xb8, 0xf1, 0x50, 0x8e, 0xe1, 0xc3, 0x43, 0x39, 0xc6, 0x86, 0x47, 0x72, 0x8c,
-	0x2b, 0x1e, 0xc9, 0x31, 0x9e, 0x78, 0x24, 0xc7, 0x78, 0xe1, 0x91, 0x1c, 0xe3, 0x83, 0x47, 0x72,
-	0x8c, 0x2f, 0x1e, 0xc9, 0x31, 0x7c, 0x78, 0x24, 0xc7, 0x38, 0xe1, 0xb1, 0x1c, 0xc3, 0x85, 0xc7,
-	0x72, 0x0c, 0x37, 0x1e, 0xcb, 0x31, 0x24, 0xb1, 0x81, 0x9d, 0x61, 0x0c, 0x08, 0x00, 0x00, 0xff,
-	0xff, 0x85, 0x81, 0x59, 0xa0, 0x1a, 0x01, 0x00, 0x00,
+	0xf5, 0x60, 0x9a, 0xf5, 0x82, 0xc1, 0x9a, 0x83, 0x60, 0xea, 0x9c, 0x4c, 0x2e, 0x3c, 0x94, 0x63,
+	0xb8, 0xf1, 0x50, 0x8e, 0xe1, 0xc3, 0x43, 0x39, 0xc6, 0x86, 0x47, 0x72, 0x8c, 0x2b, 0x1e, 0xc9,
+	0x31, 0x9e, 0x78, 0x24, 0xc7, 0x78, 0xe1, 0x91, 0x1c, 0xe3, 0x83, 0x47, 0x72, 0x8c, 0x2f, 0x1e,
+	0xc9, 0x31, 0x7c, 0x78, 0x24, 0xc7, 0x38, 0xe1, 0xb1, 0x1c, 0xc3, 0x85, 0xc7, 0x72, 0x0c, 0x37,
+	0x1e, 0xcb, 0x31, 0x24, 0xb1, 0x81, 0xcd, 0x33, 0x06, 0x04, 0x00, 0x00, 0xff, 0xff, 0x17, 0xb3,
+	0xe3, 0xd2, 0xe3, 0x00, 0x00, 0x00,
 }
 
 func (this *MyMessage) Equal(that interface{}) bool {
@@ -107,11 +111,7 @@ func (this *MyMessage) Equal(that interface{}) bool {
 	} else if this == nil {
 		return false
 	}
-	if that1.Payload == nil {
-		if this.Payload != nil {
-			return false
-		}
-	} else if !this.Payload.Equal(*that1.Payload) {
+	if !this.Payload.Equal(that1.Payload) {
 		return false
 	}
 	return true
@@ -122,7 +122,9 @@ func (this *MyMessage) GoString() string {
 	}
 	s := make([]string, 0, 5)
 	s = append(s, "&example.MyMessage{")
-	s = append(s, "Payload: "+fmt.Sprintf("%#v", this.Payload)+",\n")
+	if this.Payload != nil {
+		s = append(s, "Payload: "+fmt.Sprintf("%#v", this.Payload)+",\n")
+	}
 	s = append(s, "}")
 	return strings.Join(s, "")
 }
@@ -156,11 +158,11 @@ func (m *MyMessage) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	_ = l
 	if m.Payload != nil {
 		{
-			size := m.Payload.Size()
-			i -= size
-			if _, err := m.Payload.MarshalTo(dAtA[i:]); err != nil {
+			size, err := m.Payload.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
 				return 0, err
 			}
+			i -= size
 			i = encodeVarintExample(dAtA, i, uint64(size))
 		}
 		i--
@@ -204,7 +206,7 @@ func (this *MyMessage) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&MyMessage{`,
-		`Payload:` + fmt.Sprintf("%v", this.Payload) + `,`,
+		`Payload:` + strings.Replace(fmt.Sprintf("%v", this.Payload), "Struct", "ptypes.Struct", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -276,7 +278,7 @@ func (m *MyMessage) Unmarshal(dAtA []byte) error {
 				return io.ErrUnexpectedEOF
 			}
 			if m.Payload == nil {
-				m.Payload = &github_com_rueian_gogo_struct_codec_ptypes.Struct{}
+				m.Payload = &ptypes.Struct{}
 			}
 			if err := m.Payload.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
@@ -309,6 +311,7 @@ func (m *MyMessage) Unmarshal(dAtA []byte) error {
 func skipExample(dAtA []byte) (n int, err error) {
 	l := len(dAtA)
 	iNdEx := 0
+	depth := 0
 	for iNdEx < l {
 		var wire uint64
 		for shift := uint(0); ; shift += 7 {
@@ -340,10 +343,8 @@ func skipExample(dAtA []byte) (n int, err error) {
 					break
 				}
 			}
-			return iNdEx, nil
 		case 1:
 			iNdEx += 8
-			return iNdEx, nil
 		case 2:
 			var length int
 			for shift := uint(0); ; shift += 7 {
@@ -364,55 +365,30 @@ func skipExample(dAtA []byte) (n int, err error) {
 				return 0, ErrInvalidLengthExample
 			}
 			iNdEx += length
-			if iNdEx < 0 {
-				return 0, ErrInvalidLengthExample
-			}
-			return iNdEx, nil
 		case 3:
-			for {
-				var innerWire uint64
-				var start int = iNdEx
-				for shift := uint(0); ; shift += 7 {
-					if shift >= 64 {
-						return 0, ErrIntOverflowExample
-					}
-					if iNdEx >= l {
-						return 0, io.ErrUnexpectedEOF
-					}
-					b := dAtA[iNdEx]
-					iNdEx++
-					innerWire |= (uint64(b) & 0x7F) << shift
-					if b < 0x80 {
-						break
-					}
-				}
-				innerWireType := int(innerWire & 0x7)
-				if innerWireType == 4 {
-					break
-				}
-				next, err := skipExample(dAtA[start:])
-				if err != nil {
-					return 0, err
-				}
-				iNdEx = start + next
-				if iNdEx < 0 {
-					return 0, ErrInvalidLengthExample
-				}
-			}
-			return iNdEx, nil
+			depth++
 		case 4:
-			return iNdEx, nil
+			if depth == 0 {
+				return 0, ErrUnexpectedEndOfGroupExample
+			}
+			depth--
 		case 5:
 			iNdEx += 4
-			return iNdEx, nil
 		default:
 			return 0, fmt.Errorf("proto: illegal wireType %d", wireType)
 		}
+		if iNdEx < 0 {
+			return 0, ErrInvalidLengthExample
+		}
+		if depth == 0 {
+			return iNdEx, nil
+		}
 	}
-	panic("unreachable")
+	return 0, io.ErrUnexpectedEOF
 }
 
 var (
-	ErrInvalidLengthExample = fmt.Errorf("proto: negative length found during unmarshaling")
-	ErrIntOverflowExample   = fmt.Errorf("proto: integer overflow")
+	ErrInvalidLengthExample        = fmt.Errorf("proto: negative length found during unmarshaling")
+	ErrIntOverflowExample          = fmt.Errorf("proto: integer overflow")
+	ErrUnexpectedEndOfGroupExample = fmt.Errorf("proto: unexpected end of group")
 )
