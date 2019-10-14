@@ -36,7 +36,11 @@ type Struct struct {
 }
 
 func (s Struct) Value() (driver.Value, error) {
-	return s.MarshalJSON()
+	if bs, err := s.MarshalJSON(); err != nil {
+		return nil, err
+	} else {
+		return string(bs), nil
+	}
 }
 
 func (s *Struct) Scan(data interface{}) error {
