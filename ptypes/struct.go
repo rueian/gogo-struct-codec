@@ -35,6 +35,57 @@ type Struct struct {
 	types.Struct
 }
 
+func (s *Struct) Equal(that interface{}) bool {
+	if that == nil {
+		return s == nil
+	}
+	that1, ok := that.(*Struct)
+	if !ok {
+		that2, ok := that.(Struct)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return s == nil
+	} else if s == nil {
+		return false
+	}
+	return s.Struct.Equal(that1.Struct)
+}
+
+func (s *Struct) Compare(that interface{}) int {
+	if that == nil {
+		if s == nil {
+			return 0
+		}
+		return 1
+	}
+
+	that1, ok := that.(*Struct)
+	if !ok {
+		that2, ok := that.(Struct)
+		if ok {
+			that1 = &that2
+		} else {
+			return 1
+		}
+	}
+	if that1 == nil {
+		if s == nil {
+			return 0
+		}
+		return 1
+	} else if s == nil {
+		return -1
+	}
+	return s.Struct.Compare(that1.Struct)
+}
+
+func (s *Struct) Reset() { *s = Struct{} }
+
 func (s Struct) Value() (driver.Value, error) {
 	if bs, err := s.MarshalJSON(); err != nil {
 		return nil, err
