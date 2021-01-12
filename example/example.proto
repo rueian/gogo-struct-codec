@@ -2,9 +2,9 @@ syntax = "proto3";
 
 package example;
 
-import "github.com/gogo/protobuf/gogoproto/gogo.proto";
 import "google/protobuf/struct.proto";
 
 message MyMessage {
     google.protobuf.Struct payload = 1;
+    google.protobuf.Value value = 2;
 }

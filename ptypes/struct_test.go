@@ -12,6 +12,7 @@ import (
 func fixture() Struct {
 	return Struct{Struct: types.Struct{Fields: map[string]*types.Value{
 		"null":   {Kind: &types.Value_NullValue{NullValue: 0}},
+		"bool":   {Kind: &types.Value_BoolValue{BoolValue: true}},
 		"number": {Kind: &types.Value_NumberValue{NumberValue: 123}},
 		"string": {Kind: &types.Value_StringValue{StringValue: "456"}},
 		"array": {Kind: &types.Value_ListValue{ListValue: &types.ListValue{Values: []*types.Value{
@@ -36,7 +37,7 @@ func fixture() Struct {
 	}}}
 }
 
-const fact = `{"array":[null,123,"456",true,{"nested1":{"nested2":"789"}},[10000]],"null":null,"number":123,"string":"456","struct":{"struct":[20000]}}`
+const fact = `{"array":[null,123,"456",true,{"nested1":{"nested2":"789"}},[10000]],"bool":true,"null":null,"number":123,"string":"456","struct":{"struct":[20000]}}`
 
 func TestStruct_MarshalJSON(t *testing.T) {
 	bs, err := json.Marshal(fixture())
