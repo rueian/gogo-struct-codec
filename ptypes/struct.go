@@ -7,6 +7,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+
 	"github.com/gogo/protobuf/jsonpb"
 	"github.com/gogo/protobuf/proto"
 	"github.com/gogo/protobuf/types"
@@ -33,6 +34,13 @@ var (
 
 type Struct struct {
 	types.Struct
+}
+
+func (s *Struct) GetFields() map[string]*types.Value {
+	if s != nil {
+		return s.Struct.GetFields()
+	}
+	return nil
 }
 
 func (s *Struct) Equal(that interface{}) bool {
