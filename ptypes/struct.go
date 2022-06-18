@@ -12,6 +12,7 @@ import (
 	"github.com/gogo/protobuf/proto"
 	"github.com/gogo/protobuf/types"
 	"github.com/rueian/gogo-struct-codec/structbson"
+	"github.com/vmihailenco/msgpack/v5"
 	"go.mongodb.org/mongo-driver/bson"
 )
 
@@ -25,6 +26,8 @@ var (
 	_ driver.Valuer            = (*Struct)(nil)
 	_ sql.Scanner              = (*Struct)(nil)
 	_ proto.Message            = (*Struct)(nil)
+	_ msgpack.CustomDecoder    = (*Struct)(nil)
+	_ msgpack.CustomEncoder    = (*Struct)(nil)
 )
 
 var (
@@ -34,6 +37,23 @@ var (
 
 type Struct struct {
 	types.Struct
+}
+
+func (s *Struct) EncodeMsgpack(encoder *msgpack.Encoder) error {
+	raw, err := s.MarshalJSONPB(defaultJSONPBMarshaler)
+	if err != nil {
+		return err
+	}
+
+	return encoder.EncodeBytes(raw)
+}
+
+func (s *Struct) DecodeMsgpack(decoder *msgpack.Decoder) error {
+	raw, err := decoder.DecodeBytes()
+	if err != nil {
+		return err
+	}
+	return s.UnmarshalJSONPB(defaultJSONPBUnmarshaler, raw)
 }
 
 func (s *Struct) GetFields() map[string]*types.Value {
