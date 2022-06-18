@@ -40,7 +40,7 @@ type Struct struct {
 }
 
 func (s *Struct) EncodeMsgpack(encoder *msgpack.Encoder) error {
-	raw, err := s.MarshalJSONPB(defaultJSONPBMarshaler)
+	raw, err := proto.Marshal(s)
 	if err != nil {
 		return err
 	}
@@ -53,7 +53,8 @@ func (s *Struct) DecodeMsgpack(decoder *msgpack.Decoder) error {
 	if err != nil {
 		return err
 	}
-	return s.UnmarshalJSONPB(defaultJSONPBUnmarshaler, raw)
+
+	return proto.Unmarshal(raw, s)
 }
 
 func (s *Struct) GetFields() map[string]*types.Value {
