@@ -3,10 +3,12 @@ package ptypes
 import (
 	"bytes"
 	"encoding/json"
-	"github.com/gogo/protobuf/types"
-	"go.mongodb.org/mongo-driver/bson"
 	"reflect"
 	"testing"
+
+	"github.com/gogo/protobuf/types"
+	"github.com/vmihailenco/msgpack/v5"
+	"go.mongodb.org/mongo-driver/bson"
 )
 
 func fixture() Struct {
@@ -120,5 +122,23 @@ func TestStruct_SQL(t *testing.T) {
 
 	if !reflect.DeepEqual(c, fixture()) {
 		t.Fatalf("result not match with fact, got %v", c)
+	}
+}
+
+func TestStruct_Msgpack(t *testing.T) {
+	f := fixture()
+	data, err := msgpack.Marshal(&f)
+	if err != nil {
+		t.Error(err)
+	}
+
+	c := Struct{}
+	err = msgpack.Unmarshal(data, &c)
+	if err != nil {
+		t.Error(err)
+	}
+
+	if !reflect.DeepEqual(f, c) {
+		t.Fatalf("result does not match the fact, got %v", c)
 	}
 }
